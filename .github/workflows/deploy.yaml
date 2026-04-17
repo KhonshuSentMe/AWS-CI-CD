@@ -72,6 +72,7 @@ jobs:
             cd /home/${{ secrets.EC2_USER }}/backend &&
             npm install &&
             npm run build &&
-            pm2 restart backend || pm2 start dist/index.js --name backend &&
+            pm2 delete backend || true &&
+            pm2 start dist/index.js --name backend &&
             pm2 save
           "
