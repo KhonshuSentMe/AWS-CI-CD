@@ -24,7 +24,7 @@ app.get('/api/message', (req, res) => {
 
 app.get('/api/data', async (req, res) => {
   try {
-    const result = await pool.query('SELECT * FROM sample_data');
+    const result = await pool.query('SELECT NOW()');
     res.json(result.rows);
   } catch (err: any) {
     console.error('DB ERROR:', err);
