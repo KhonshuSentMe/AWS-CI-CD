@@ -40,6 +40,8 @@ function App() {
 
         <h2>Data from Database:</h2>
         <p>{timestamp}</p>
+
+        <p>CI/CD is working!</p>
       </header>
     </div>
   );
