@@ -2,8 +2,9 @@ import express from 'express';
 import cors from 'cors';
 import { Pool } from 'pg';
 import dotenv from 'dotenv';
+import path from 'path';
 
-dotenv.config();
+dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
 const app = express();
 
@@ -16,6 +17,9 @@ const pool = new Pool({
   database: process.env.DB_NAME,
   password: process.env.DB_PASSWORD,
   port: parseInt(process.env.DB_PORT || '5432'),
+  ssl: {
+    rejectUnauthorized: false,
+  },
 });
 
 app.get('/api/message', (req, res) => {
@@ -24,8 +28,8 @@ app.get('/api/message', (req, res) => {
 
 app.get('/api/data', async (req, res) => {
   try {
-    const result = await pool.query('SELECT NOW()');
-    res.json(result.rows);
+    const result = await pool.query('SELECT NOW() AS timestamp');
+    res.json(result.rows[0]);
   } catch (err: any) {
     console.error('DB ERROR:', err);
     res.status(500).json({
@@ -37,8 +41,8 @@ app.get('/api/data', async (req, res) => {
 
 app.get('/api/test-db', async (req, res) => {
   try {
-    const result = await pool.query('SELECT NOW()');
-    res.json({ success: true, result: result.rows });
+    const result = await pool.query('SELECT NOW() AS timestamp');
+    res.json({ success: true, result: result.rows[0] });
   } catch (err: any) {
     console.error('DB ERROR:', err);
     res.status(500).json({ success: false, error: err.message });
